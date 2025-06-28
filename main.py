@@ -1,6 +1,7 @@
 import random
 
-board = [[0 for _ in range(9)] for _ in range(9)]   # 9x9 Grid Of 0s
+full_board = [[0 for _ in range(9)] for _ in range(9)]   # 9x9 Grid Of 0s
+puzzle_board = [[0 for _ in range(9)] for _ in range(9)]   # 9x9 Grid Of 0s
 
 def is_valid(board, row, col, num):
     # Check Rows and Columns
@@ -45,7 +46,43 @@ def display_board_text(board):
             val = board[i][j]
             print(val if val != 0 else ".", end=" ")
         print() # New Line After Each Row
+    print()
 
-fill_board(board)
+def remove_numbers(board, difficulty='easy'):
+    # random int [0-9] % difficulty = x (interval for removing numbers)
+        # 4 % 1 = 4 -> then get new interval
+        # 9 % 1 = 9
 
-display_board_text(board)
+        # 2 % 5 = 0 (remove next number in grid)
+        # 9 % 5 = 4 
+
+    difficulty_levels = {
+        'easy': 35,
+        'medium': 45,
+        'hard': 55,
+        'impossible': 65
+    }
+
+    board_copy = [row[:] for row in board]
+    num_to_remove = difficulty_levels.get(difficulty, 35)
+
+    removed = 0
+    while removed < num_to_remove:
+        row = random.randint(0,8)
+        col = random.randint(0,8)
+
+        if board_copy[row][col] != 0:
+            board_copy[row][col] = 0
+            removed += 1
+
+    return board_copy
+
+fill_board(full_board)
+
+print("Complete Board: ")
+display_board_text(full_board)
+
+puzzle_board = remove_numbers(full_board, 'easy')
+
+print("Puzzle Board: ")
+display_board_text(puzzle_board)
